@@ -6,8 +6,8 @@
 double MatA[50][50] ;
 double MatB[50][50];
 double MatResult[50][50];
-static int active_degree = 1;
-static double active_coeffs[5] = {0};
+static int ActiveDegree = 1;
+static double ActiveCoeffs[5] = {0};
 typedef double (*MathFunc)(double);
 
 //BASIC ARTHEMETIC
@@ -22,7 +22,7 @@ double division(double a, double b);
 void MatrixDisplay();
 void MatrixAddition(int row, int column);
 void MatrixSubtraction(int row, int column);
-void ScalarMultiplication(int x, int row, int column);
+void ScalarMultiplication(double x, int row, int column);
 void MatrixMultiplication(int rowA, int columnA, int rowB, int columnB);
 void MatrixTranspose(int row, int column);
 void MatrixInput(int rowA, int rowB, int columnA, int columnB);
@@ -32,13 +32,16 @@ void MatrixOutput(int row, int column);
 
 //DIFFERENTIATION
 void DifferentiationDisplay();
-double derivative_central(MathFunc f, double x, double h) {
+double DerivativeCentral(MathFunc f, double x, double h)
+{
     return (f(x + h) - f(x - h)) / (2.0 * h);
 }
-double custom_poly(double x) {
-    double result = active_coeffs[0];
-    for (int i = 1; i <= active_degree; i++) {
-        result = result * x + active_coeffs[i];
+double customPoly(double x)
+{
+    double result = ActiveCoeffs[0];
+    for (int i = 1; i <= ActiveDegree; i++)
+    {
+        result = result * x + ActiveCoeffs[i];
     }
     return result;
 }
@@ -47,13 +50,15 @@ double custom_poly(double x) {
 
 //INTEGRATION
 void IntegrationDisplay();
-double integrate_riemann(MathFunc f, double a, double b, int n) {
+double IntegrateRiemann(MathFunc f, double a, double b, int n)
+{
     if (n <= 0) return 0.0;
 
     double dx = (b - a) / n;
     double sum = 0.0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         double x_mid = a + (i + 0.5) * dx;
         sum += f(x_mid);
     }
@@ -94,7 +99,7 @@ int main()
             printf("Exiting.... BYE");
             return 0;
             default:
-            printf("Please enter a num b/w (1 and 5) !");
+            printf("Please enter a number between (1 and 5) inclusive!");
             break;
         }
     }while(choice != 5);
@@ -113,6 +118,11 @@ void BasicArthemeticDisplay()
     printf("  [5] Power           (a ^ b)\n");
     printf("  [6] Back to Main Menu\n");
     scanf("%d",&input);
+    while(input < 1 || input > 6)
+    {
+        printf("Input must be between 1 and 6 inclusive! please enter again: ");
+        scanf("%d",&input);
+    }
     switch(input)
     {
         case 1:
@@ -144,6 +154,11 @@ void BasicArthemeticDisplay()
         scanf("%lf",&a);
         printf("Enter B: ");
         scanf("%lf",&b);
+        while(b==0)
+        {
+            printf("Division by zero is not possible! Enter B again: ");
+            scanf("%lf",&b);
+        }
         printf("Result: %0.2lf\n", division(a,b));
         BasicArthemeticDisplay();
         break;
@@ -157,19 +172,14 @@ void BasicArthemeticDisplay()
         break;
         case 6:
         return;
-        break;
-        default:
-        printf("Please enter a valid choice!\n");
-        BasicArthemeticDisplay();
-        break;
-        
     }
 }
 
 
 void MatrixDisplay()
 {
-    int input, rowA, rowB, columnA, columnB, row, column, x;
+    int input, rowA, rowB, columnA, columnB, row, column;
+    double x;
     printf("MATRIX OPERATIONS\n");
     printf("  [1] Matrix Addition       (A + B)\n");
     printf("  [2] Matrix Subtraction    (A - B)\n");
@@ -179,13 +189,29 @@ void MatrixDisplay()
     printf("  [6] Back to Main Menu\n");
 
     scanf("%d",&input);
+    while(input < 1 || input > 6)
+    {
+        printf("Input must be between 1 and 6 inclusive! please enter again: ");
+        scanf("%d",&input);
+    }
+    
     switch (input)
     {
     case 1://Matrix Addition
     printf("Enter number of rows in Matrix A and B: ");
     scanf("%d",&row);
+    while(row < 1 || row > 50)
+    {
+        printf("Number of rows must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&row);
+    }
     printf("Enter number of columns in Matrix A and B: ");
     scanf("%d",&column);
+    while(column < 1 || column > 50)
+    {
+        printf("Number of columns must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&column);
+    }
     MatrixInput(row,row,column,column);
     MatrixAddition(row, column);
     MatrixOutput(row, column);
@@ -194,8 +220,19 @@ void MatrixDisplay()
     case 2:
     printf("Enter number of rows in Matrix A and B: ");
     scanf("%d",&row);
+    while(row < 1 || row > 50)
+    {
+        printf("Number of rows must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&row);
+    }
     printf("Enter number of columns in Matrix A and B: ");
     scanf("%d",&column);
+    while(column < 1 || column > 50)
+    {
+        printf("Number of columns must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&column);
+    }
+    
     MatrixInput(row,row,column,column);
     MatrixSubtraction(row, column);
     MatrixOutput(row, column);
@@ -204,11 +241,23 @@ void MatrixDisplay()
     case 3:
     printf("Enter the number of rows in Matrix: ");
     scanf("%d",&row);
+    while(row < 1 || row > 50)
+    {
+        printf("Number of rows must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&row);
+    }
     printf("Enter the number of columns in Matrix: ");
     scanf("%d",&column);
+    while(column < 1 || column > 50)
+    {
+        printf("Number of columns must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&column);
+    }
+    
+    
     MatrixInput(row,0,column,0);
     printf("Enter the scalar multiple: ");
-    scanf("%d",&x);
+    scanf("%lf",&x);
     ScalarMultiplication(x,row,column);
     MatrixOutput(row,column);
     MatrixDisplay();
@@ -216,15 +265,36 @@ void MatrixDisplay()
     case 4:
     printf("Enter the number of rows in Matrix A: ");
     scanf("%d",&rowA);
+    while(rowA < 1 || rowA > 50)
+    {
+        printf("Number of rows must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&rowA);
+    }
     printf("Enter the number of columns in Matrix A: ");
     scanf("%d",&columnA);
+    while(columnA < 1 || columnA > 50)
+    {
+        printf("Number of columns must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&columnA);
+    }
     printf("Enter the number of rows in Matrix B: ");
     scanf("%d",&rowB);
+    while(rowB < 1 || rowB > 50)
+    {
+        printf("Number of rows must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&rowB);
+    }
     printf("Enter the number of columns in Matrix B: ");
     scanf("%d",&columnB);
+    while(columnB < 1 || columnB > 50)
+    {
+        printf("Number of columns must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&columnB);
+    }
     if(columnA != rowB)
     {
         printf("Matrix Multiplication not Possible, number of columns in A should be equal to number of rows in B!\n");
+        MatrixDisplay();
     }
     else
     {
@@ -239,8 +309,18 @@ void MatrixDisplay()
     case 5:
     printf("Enter the number of rows in Matrix: ");
     scanf("%d",&row);
+    while(row < 1 || row > 50)
+    {
+        printf("Number of rows must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&row);
+    }
     printf("Enter the number of columns in Matrix: ");
     scanf("%d",&column);
+    while(column < 1 || column > 50)
+    {
+        printf("Number of columns must be greater than 0 and lesser than 50, Please enter again: ");
+        scanf("%d",&column);
+    }
     MatrixInput(row,0,column,0);
     MatrixTranspose(row,column);
     MatrixOutput(column,row);
@@ -248,10 +328,6 @@ void MatrixDisplay()
     break;
     case 6:
     return;
-    default:
-    printf("Please enter a valid choice !");
-    MatrixDisplay();
-    break;
     }
 }
 
@@ -300,7 +376,7 @@ void MatrixSubtraction(int row, int column)
 }
 
 
-void ScalarMultiplication(int x, int row, int column)
+void ScalarMultiplication(double x, int row, int column)
 {
     for(int i=0; i < row; i++)
     {
@@ -380,13 +456,18 @@ void MatrixOutput(int row, int column)
 void DifferentiationDisplay()
 {
     //printf("Enter degree (1 to 4): ");
-    printf("  [1] Linear Polynomial : f(x) = x + a\n");
+    printf("  [1] Linear Polynomial : f(x) = ax + b\n");
     printf("  [2] Quadratic Polynomial : f(x) = a*x^2 + b*x + c\n");
     printf("  [3] Cubic Polynomial : f(x) = a*x^3 + b*x^2 + c*x + d\n");
-    printf("  [4] Quartic Polynomial : f(x) = a*x^4 b*x^3 + c*x^2 + d*x + e\n");
+    printf("  [4] Quartic Polynomial : f(x) = a*x^4 + b*x^3 + c*x^2 + d*x + e\n");
     printf("  [5] Return to Menu\n");
-    scanf("%d", &active_degree);
-    if(active_degree == 5)
+    scanf("%d", &ActiveDegree);
+    while (ActiveDegree < 1 || ActiveDegree > 5)
+    {
+        printf("Please enter a number between 1 and 5 (inclusive) !");
+        scanf("%d",  &ActiveDegree);
+    }
+    if (ActiveDegree == 5)
     {
         return;
     }
@@ -394,9 +475,10 @@ void DifferentiationDisplay()
     {
 
     
-    for (int i = 0; i <= active_degree; i++) {
-        printf("Enter coeff for x^%d: ", active_degree - i);
-        scanf("%lf", &active_coeffs[i]);
+    for (int i = 0; i <= ActiveDegree; i++)
+    {
+        printf("Enter coeff for x^%d: ", ActiveDegree - i);
+        scanf("%lf", &ActiveCoeffs[i]);
     }
 
     
@@ -404,35 +486,42 @@ void DifferentiationDisplay()
     printf("Enter x: ");
     scanf("%lf",&x);
     
-    printf("f'(%.2f) = %.8f\n", x, derivative_central(custom_poly, x, 1e-5));
+    printf("f'(%.2f) = %.8f\n", x, DerivativeCentral(customPoly, x, 1e-5));
     DifferentiationDisplay();
     }
 }
 
 void IntegrationDisplay()
-{
+{   
+    
     printf("  [1] Linear Polynomial : f(x) = x + a\n");
     printf("  [2] Quadratic Polynomial : f(x) = a*x^2 + b*x + c\n");
     printf("  [3] Cubic Polynomial : f(x) = a*x^3 + b*x^2 + c*x + d\n");
     printf("  [4] Quartic Polynomial : f(x) = a*x^4 b*x^3 + c*x^2 + d*x + e\n");
     printf("  [5] Return to Menu\n");
-    scanf("%d", &active_degree);
-    if(active_degree == 5)
+    scanf("%d", &ActiveDegree);
+    while (ActiveDegree < 1 || ActiveDegree > 5)
+    {
+        printf("Please enter a number between 1 and 5 (inclusive) !");
+        scanf("%d", &ActiveDegree);
+    }
+    if (ActiveDegree == 5)
     {
         return;
     }
     else
     {    
-        for (int i = 0; i <= active_degree; i++) {
-            printf("Enter coeff for x^%d: ", active_degree - i);
-            scanf("%lf", &active_coeffs[i]);
+        for (int i = 0; i <= ActiveDegree; i++)
+        {
+            printf("Enter coeff for x^%d: ", ActiveDegree - i);
+            scanf("%lf", &ActiveCoeffs[i]);
         }
         double a, b;
-        int n = 10000; // Number of subintervals
+        int n = 100000;
         printf("\nEnter lower limit (a) and upper limit (b) for integration: ");
         scanf("%lf %lf", &a, &b);
 
-        double area = integrate_riemann(custom_poly, a, b, n);
+        double area = IntegrateRiemann(customPoly, a, b, n);
         printf("Integral from %.2f to %.2f = %.8f\n", a, b, area);
         IntegrationDisplay();
     }
