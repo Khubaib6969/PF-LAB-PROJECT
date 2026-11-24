@@ -6,8 +6,8 @@
 double MatA[50][50] ;
 double MatB[50][50];
 double MatResult[50][50];
-static int ActiveDegree = 1;
-static double ActiveCoeffs[5] = {0};
+int ActiveDegree = 1;
+double ActiveCoeffs[5] = {0};
 typedef double (*MathFunc)(double);
 
 //BASIC ARTHEMETIC
@@ -389,10 +389,12 @@ void ScalarMultiplication(double x, int row, int column)
 
 void MatrixMultiplication(int rowA, int columnA, int rowB, int columnB)
 {
-    for(int i =0; i<rowA;++i){
-        for(int j=0;j<columnB;++j){
+    for(int i =0; i<rowA;i++){
+        for(int j=0;j<columnB;j++)
+        {
             MatResult[i][j] = 0;
-            for (int k=0;k<columnA;++k){
+            for (int k=0;k<columnA;k++)
+            {
                     MatResult[i][j] += MatA[i][k] * MatB[k][j]; 
             }
         }
@@ -494,10 +496,10 @@ void DifferentiationDisplay()
 void IntegrationDisplay()
 {   
     
-    printf("  [1] Linear Polynomial : f(x) = x + a\n");
+    printf("  [1] Linear Polynomial : f(x) = ax + b\n");
     printf("  [2] Quadratic Polynomial : f(x) = a*x^2 + b*x + c\n");
     printf("  [3] Cubic Polynomial : f(x) = a*x^3 + b*x^2 + c*x + d\n");
-    printf("  [4] Quartic Polynomial : f(x) = a*x^4 b*x^3 + c*x^2 + d*x + e\n");
+    printf("  [4] Quartic Polynomial : f(x) = a*x^4 + b*x^3 + c*x^2 + d*x + e\n");
     printf("  [5] Return to Menu\n");
     scanf("%d", &ActiveDegree);
     while (ActiveDegree < 1 || ActiveDegree > 5)
